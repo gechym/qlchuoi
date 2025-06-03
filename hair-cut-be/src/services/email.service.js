@@ -22,7 +22,7 @@ const generateVerificationCode = () => {
 const sendVerificationEmail = async (email, fullName, verificationCode) => {
   const transporter = createTransporter();
   
-  const verificationLink = `${process.env.FRONTEND_URL}/auth/verify?email=${encodeURIComponent(email)}&code=${verificationCode}`;
+  const verificationLink = `http://localhost:3111/api/auth/verify?email=${encodeURIComponent(email)}&verification_code=${verificationCode}`;
   
   const mailOptions = {
     from: process.env.EMAIL_USER,

@@ -81,6 +81,21 @@ const resendVerificationCode = [
 	},
 ];
 
+const verifyEmailByLink = [
+	async (req, res) => {
+		try {
+			const { email, verification_code } = req.query;
+			authService.verifyEmailByLink(
+				email,
+				verification_code
+			);
+			return res.status(200).send("Xác thực email thành công! vui lòng đăng nhập lại");
+		} catch (error) {
+			return res.status(400).json({ message: error.message });
+		}
+	},
+];
+
 export default {
 	registerUser,
 	loginUser,
@@ -89,4 +104,5 @@ export default {
 	isEmailRegistered,
 	verifyEmail,
 	resendVerificationCode,
+	verifyEmailByLink,
 };

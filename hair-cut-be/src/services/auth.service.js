@@ -224,6 +224,36 @@ const resendVerificationCode = async (email) => {
 	}
 };
 
+const verifyEmailByLink = async (email, code) => {
+	try {
+		const user = await db.user.findFirst({
+			where: { email },
+		});
+		if (!user) {
+			throw new Error("Không tìm thấy tài khoản");
+		}
+		if (user.is_verify) {
+			throw new Error("Tài khoản đã được xác thực");
+		}
+		if (user.verification_code !== code) {
+			throw new Error("Mã xác thực không đúng");
+		}
+		await db.user.update({
+			where: { id: user.id },
+			data: {
+				is_verify: true,
+			},
+		});
+
+		return {
+			message: "Xác thực email thành công!",
+			success: true,
+		};
+	} catch (err) {
+		throw new Error(err.message);
+	}
+};
+
 export default {
 	registerUser,
 	loginUser,
@@ -232,4 +262,5 @@ export default {
 	isEmailRegistered,
 	verifyEmail,
 	resendVerificationCode,
+	verifyEmailByLink,
 };
